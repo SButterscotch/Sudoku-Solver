@@ -5,7 +5,7 @@ from os import truncate
 
 
 board = [
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
+        [5, 3, "x", "x", "x", "x", "x", "x", "x"],
         ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
         ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
         ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
@@ -36,10 +36,10 @@ def print_board(bo):
 
 
 def is_free(bo):
-    for i in range(len(bo)):
-        for j in range(len(bo[0])):
-            if bo[i][j] == "x":
-                return (i, j)
+    for row in range(len(bo)):
+        for col in range(len(bo[0])):
+            if bo[row][col] == "x":
+                return (row, col)
 
 
 def is_valid(bo, num, pos):
@@ -61,25 +61,29 @@ def is_valid(bo, num, pos):
     
     return True
 
-def solve(bo):
+def solve(bo, numTimesRun):
+    print("Trying....")
+    print_board(bo)
+    
     free = is_free(bo)
     if not free:
+        print(f"Done! ran {numTimesRun} times")
         return True
     else:
         row, col = free
-
+    
     for i in range(1, 10):
         if is_valid(bo, i, (row, col)):
             bo[row][col] = i
 
-            if solve(bo):
+            if solve(bo, numTimesRun+1):
+                
                 return True
 
 
             bo[row][col] = "x"
     
     return False
-print_board(board)
-solve(board)
-print("________________________________\n")
-print_board(board)
+
+solve(board, 0)
+
