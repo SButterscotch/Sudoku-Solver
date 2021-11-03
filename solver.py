@@ -1,21 +1,24 @@
 
-
+import os
 
 from os import truncate
-
+with open("tracker.txt", "w") as file:
+    file.close()
 
 board = [
-        [5, 3, "x", "x", "x", "x", "x", "x", "x"],
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"],
-        ["x", "x", "x", "x", "x", "x", "x", "x", "x"]
+        ["x", "x", 5, 3, "x", "x", "x", "x", "x"],
+        [8, "x", "x", "x", "x", "x", "x", 2, "x"],
+        ["x", 7, "x", "x", 1, "x", 5, "x", "x"],
+        [4, "x", "x", "x", "x", 5, 3, "x", "x"],
+        ["x", 1, "x", "x", 7, "x", "x", "x", 6],
+        ["x", "x", 3, 2, "x", "x", "x", 8, "x"],
+        ["x", 6, "x", 5, "x", "x", "x", "x", 9],
+        ["x", "x", 4, "x", "x", "x", "x", 3, "x"],
+        ["x", "x", "x", "x", "x", 9, 7, "x", "x"]
 
 ]
+
+
 
 
 def print_board(bo):
@@ -33,6 +36,7 @@ def print_board(bo):
 
             else:
                 print(f"{bo[i][j]} ", end="")
+
 
 
 def is_free(bo):
@@ -61,22 +65,41 @@ def is_valid(bo, num, pos):
     
     return True
 
-def solve(bo, numTimesRun):
-    print("Trying....")
+def tracker():
+    with open("tracker.txt", "a") as file:
+        file.write("x")
+
+def counter():
+    with open("tracker.txt", "r") as file:
+        str = file.read()
+        count = len(str)
+        return count
+
+def solve(bo):
+    
+    print(f"Trying {counter()} times!")
     print_board(bo)
+    
+    
     
     free = is_free(bo)
     if not free:
-        print(f"Done! ran {numTimesRun} times")
+        print("\n-------------------------------------------------\n")
+        print_board(bo)
+        print(f"Done! ran {counter()} times")
+        
+        os.remove("tracker.txt")
         return True
     else:
         row, col = free
     
     for i in range(1, 10):
+        tracker()
+        
         if is_valid(bo, i, (row, col)):
             bo[row][col] = i
 
-            if solve(bo, numTimesRun+1):
+            if solve(bo):
                 
                 return True
 
@@ -85,5 +108,7 @@ def solve(bo, numTimesRun):
     
     return False
 
-solve(board, 0)
+
+
+solve(board)
 
